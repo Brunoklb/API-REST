@@ -1,7 +1,7 @@
 /* Criando o banco de dados */
 
 CREATE TABLE bankslips (
-    id UUID PRIMARY KEY,
+    id VARCHAR(50) PRIMARY KEY,
     due_date DATE NOT NULL,
     payment_date DATE,
     total_in_cents INT NOT NULL,

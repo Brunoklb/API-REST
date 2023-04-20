@@ -9,8 +9,15 @@ const port = process.env.PORT || 8080
 const routes = require('./routes')
 server.use(routes)
 
+const db = require('../scripts/database')
+db.init()
+
+server.get('/', (req, res)=>{
+    res.send('Esta funcionando')
+})
+
 server.get('/rest/bankslips', (req, res) => {
-    return res.json({mensage: 'Teste'})
+    return res.json({mensage: 'Tudo certo por aqui'})
 });
 
 server.listen(port, () => console.log(`
