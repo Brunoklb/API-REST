@@ -6,10 +6,11 @@ const protocol = process.env.PROTOCOL || "http"
 const ip = require('ip').address()
 const port = process.env.PORT || 8080
 
-const routes = require('./routes')
+const routes = require('./routes/routes')
 server.use(routes)
 
-const db = require('../scripts/database')
+const db = require('./db/bankSlipRepository');
+const { json } = require('sequelize');
 db.init()
 
 server.get('/', (req, res)=>{
@@ -17,7 +18,7 @@ server.get('/', (req, res)=>{
 })
 
 server.get('/rest/bankslips', (req, res) => {
-    return res.json({mensage: 'Tudo certo por aqui'})
+    return res.status(200).send('Tudo certo por aqui');
 });
 
 server.listen(port, () => console.log(`
