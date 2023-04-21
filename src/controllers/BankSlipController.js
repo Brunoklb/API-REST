@@ -1,4 +1,4 @@
-const { getOne, getAll } = require('./database');
+const { getOne, getAll } = require('../db/BankSlipRepository');
 
 async function getBankSlipById(req, res) {
     const { id } = req.params;

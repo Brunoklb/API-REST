@@ -1,4 +1,4 @@
-const { create, getAll, getOne, init, remove, update } = require('../../src/db/bankSlipRepository');
+const { create, getAll, getOne, init, remove, update } = require('../../src/db/BankSlipRepository');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
