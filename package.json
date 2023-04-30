@@ -16,8 +16,7 @@
     "knex": "^2.4.2",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22",
-    "sequelize": "^6.30.0",
-    "uuid": "^9.0.0"
+    "sequelize": "^6.30.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
