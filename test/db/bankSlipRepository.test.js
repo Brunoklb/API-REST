@@ -5,6 +5,7 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const { expect } = chai;
 const mysql = require('mysql');
+const mysql2 = require('mysql2/promise')
 const { query } = require('express');
 const e = require('express');
 
@@ -23,7 +24,7 @@ describe('Database functions', ()=>{
     describe('init()', ()=>{
         it('Should initialize a database', async()=>{
             const connection = { query:queryStub, end: sinon.stub }
-            const createConnectionStub = sinon.stub(mysql, 'createConnection').resolves(connection);
+            const createConnectionStub = sinon.stub(mysql2, 'createConnection').resolves(connection);
             const conn = await init();
 
             expect(createConnectionStub).to.have.been.called;
@@ -36,7 +37,7 @@ describe('Database functions', ()=>{
             const expectedPassword = process.env.DB_PASSWORD;
             const expectedDatabase = process.env.DB_NAME;
             const connection = {query:queryStub, end:sinon.stub()};
-            const createConnectionStub = sinon.stub(mysql, 'createConnection').resolves(connection);
+            const createConnectionStub = sinon.stub(mysql2, 'createConnection').resolves(connection);
             const conn = await init();
 
             expect(createConnectionStub).to.been.calledWith({
@@ -54,7 +55,7 @@ describe('Database functions', ()=>{
             const connection = { query:queryStub, end: sinon.stub() };
             const bankSip = { id: 1, name: 'Test Bank Slip', due_date: '2023-05-01', amount: 100, paid: false };
             queryStub.resolves([[bankSip]]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await getOne(1);
 
             expect(queryStub).to.have.been.calledWith('SELECT * FROM bankslips WHERE id = ?', [1]);
@@ -64,7 +65,7 @@ describe('Database functions', ()=>{
         it('Should return null if no bank slip is found', async()=>{
             const connection = { query: queryStub, end: sinon.stub() }
             queryStub.resolves([[]]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await getOne(1);
 
             expect(queryStub).to.have.been.calledWith('SELECT * FROM bankslips WHERE id = ?', [1]);
@@ -80,7 +81,7 @@ describe('Database functions', ()=>{
                 {id: 2, name: 'Test Bank Slip 2', due_date: '2023-05-01', amount: 100, paid: false},
             ];
             queryStub.resolves([bankSlips]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await getAll();
 
             expect(queryStub).to.have.been.calledWith('SELECT * FROM bankslips');
@@ -90,7 +91,7 @@ describe('Database functions', ()=>{
         it('Should return an empty array if no bank slip are found', async()=>{
             const connection = { query:queryStub, end: sinon.stub() };
             queryStub.resolves([[]]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await getAll();
 
             expect(queryStub).to.have.been.calledWith('SELECT * FROM bankslips');
@@ -103,7 +104,7 @@ describe('Database functions', ()=>{
             const id = 1;
             const connection = { query:queryStub, end: sinon.stub() };
             queryStub.resolves([{ affectedRows: 1 }]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await remove(id);
 
             expect(queryStub).to.have.been.calledWith('DELETE FROM bankslips WHERE id = ?', [id]);
@@ -114,7 +115,7 @@ describe('Database functions', ()=>{
             const id = 1;
             const connection = { query:queryStub, end:sinon.stub() };
             queryStub.resolves([{affectedRows: 0}]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await remove(id);
 
             expect(queryStub).to.have.been.calledWith('DELETE FROM bankslips WHERE id = ?', [id]);
@@ -128,7 +129,7 @@ describe('Database functions', ()=>{
             const connection = { query: queryStub, end: sinon.stub() };
             const { id, ...updatedData } = bankSlip;
             queryStub.resolves([{affectedRows: 1}]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await update(bankSlip);
 
             expect(queryStub).to.have.been.calledWith('UPDATE bankslips SET ? WHERE id = ?', [updatedData, 1]);
@@ -139,7 +140,7 @@ describe('Database functions', ()=>{
             const connection = { query:queryStub, end: sinon.stub() };
             const {id, ...updatedData} = bankSlip;
             queryStub.resolves([{affectedRows: 0}]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await update(bankSlip);
 
             expect(queryStub).to.have.been.calledWith('UPDATE bankslips SET ? WHERE id = ?', [updatedData, 1]);
@@ -151,7 +152,7 @@ describe('Database functions', ()=>{
             const bankSlip = { id: 1, name: 'Test Bank Slip', due_date: '2023-04-30', amount: 100, paid: false };
             const connection = { query:queryStub, end: sinon.stub() };
             queryStub.resolves([{insertId: 1}]);
-            sinon.stub(mysql, 'createConnection').resolves(connection);
+            sinon.stub(mysql2, 'createConnection').resolves(connection);
             const result = await create(bankSlip);
 
             expect(queryStub).to.have.been.calledWith('INSERT INTO bankslips SET ?', [bankSlip]);

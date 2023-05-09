@@ -1,5 +1,5 @@
 const { query } = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 async function init(){
