@@ -1,8 +1,8 @@
-const router = require('express').Router()
+const router = require('express').Router();
 
-const bankSlipController = require('../controllers/BankSlipController')
+const bankSlipController = require('../controllers/BankSlipController');
 
-router.get('/bankslip', bankSlipController.getAllBankSlips)
-router.get('/bankslip/:id', bankSlipController.getBankSlipById)
+router.get('/rest/bankslips', bankSlipController.getAllBankSlips);
+router.get('/rest/bankslips/:id', bankSlipController.getBankSlipById);
 
-module.exports = router
+module.exports = router;

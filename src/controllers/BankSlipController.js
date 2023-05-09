@@ -1,4 +1,4 @@
-const { getOne, getAll } = require('../db/BankSlipRepository');
+const { getOne, getAll } = require('../db/bankSlipRepository');
 
 async function getBankSlipById(req, res) {
     const { id } = req.params;
@@ -23,4 +23,4 @@ async function getAllBankSlips(req, res) {
     }
 }
 
-module.exports = { getAllBankSlips, getBankSlipById };
+module.exports = {getBankSlipById, getAllBankSlips };
