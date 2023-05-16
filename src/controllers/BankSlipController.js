@@ -103,7 +103,7 @@ async function payBankSlip(req, res) {
         res.status(500).json({ message: 'Error paying bankslip' });
     }
 }
-  
+
 async function cancelBankSlipById(req, res){
     const { id } = req.params;
 
