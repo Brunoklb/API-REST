@@ -7,6 +7,7 @@ const ip = require('ip').address()
 const port = process.env.PORT || 8080
 
 const routes = require('./routes/BankSlipRoutes')
+server.use(express.json());
 server.use(routes)
 
 server.listen(port, () => console.log(`
