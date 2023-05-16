@@ -1,7 +1,7 @@
 /* Criando o banco de dados */
 
 CREATE TABLE bankslips (
-    id VARCHAR(50) PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     due_date DATE NOT NULL,
     payment_date DATE,
     total_in_cents INT NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE bankslips (
 
 /* Inserindo um novo boleto na tabela: */
 
-INSERT INTO bankslips (id, due_date, total_in_cents, customer, status)
-VALUES ('84e8adbf-1a14-403b-ad73-d78ae19b59bf', '2018-01-01', 100000, 'Trillian Company', 'PENDING');
+INSERT INTO bankslips (id, due_date, payment_date, total_in_cents, customer, status)
+VALUES ('84e8adbf-1a14-403b-ad73-d78ae19b59bf', '2018-01-01', 2018-0, 100000, 'Trillian Company', 'PENDING');
 
 /* Para listar todos os boletos: */
 
