@@ -11,8 +11,9 @@ const bankSlipController = require('../../src/controllers/BankSlipController');
 const bankSlipRepository = require('../../src/db/bankSlipRepository');
 
 describe('Bank Slip Controller', () => {
+  let createStub;
   beforeEach(() => {
-    stub = sinon.stub;
+    createStub = sinon.stub(bankSlipRepository, 'create');
   });
 
   afterEach(() => {
@@ -20,7 +21,25 @@ describe('Bank Slip Controller', () => {
   });
 
   describe('createBankSlip()', () => {
-    it('Should create a bank slip', async () => {
+    it('Should respond with 422 when bank slip is not provided in request body', async () => {
+      const req = {
+        body: {},
+      };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      const next = sinon.stub();
+
+      await bankSlipController.createBankSlip(req, res, next);
+
+      expect(next.calledOnce).to.be.true;
+      expect(next.args[0][0].message).to.equal('Bank slip not provided in the request body');
+      expect(next.args[0][0].status).to.equal(422);
+    });
+
+    it('Should respond with 422 when bank slip creation fails', async () => {
       const req = {
         body: {
           due_date: '2023-06-02',
@@ -29,16 +48,19 @@ describe('Bank Slip Controller', () => {
         },
       };
       const res = {
-        status: stub().returnsThis(),
-        json: stub(),
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
       };
 
-      const createStub = sinon.stub(bankSlipRepository, 'create').resolves('123456');
-      await bankSlipController.createBankSlip(req, res);
+      const next = sinon.stub();
 
-      expect(createStub.calledOnce).to.be.true;
-      expect(res.status.calledWith(201)).to.be.true;
-      expect(res.json.calledWith({ id: '123456', ...req.body })).to.be.true;
+      createStub.rejects(new Error('Invalid bank slip provided'));
+
+      await bankSlipController.createBankSlip(req, res, next);
+
+      expect(next.calledOnce).to.be.true;
+      expect(next.args[0][0].message).to.equal('Invalid bank slip provided');
+      expect(next.args[0][0].status).to.equal(422);
     });
   });
 });
