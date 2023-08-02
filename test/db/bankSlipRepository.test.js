@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-/*const { create, getAll, getOne, init, remove, update } = require('../../src/db/bankSlipRepository');
+const { create, getAll, getOne, init, remove, update } = require('../../src/model/bankSlipRepository');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -158,4 +158,4 @@ describe('Database functions', ()=>{
 			expect(result).to.equal(1);
 		});
 	});
-});*/
+});

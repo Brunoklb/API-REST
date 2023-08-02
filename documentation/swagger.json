@@ -1,0 +1,405 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "BankSlip API",
+    "description": "API para gerenciamento de boletos bancários"
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/rest/bankslips": {
+      "post": {
+        "summary": "Cria um novo boleto",
+        "description": "Cria um novo boleto bancário no sistema",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "bankSlip",
+            "in": "body",
+            "description": "Dados do boleto a ser criado",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "due_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de vencimento do boleto (formato: YYYY-MM-DD)"
+                },
+                "total_in_cents": {
+                  "type": "integer",
+                  "description": "Valor total do boleto em centavos"
+                },
+                "customer": {
+                  "type": "string",
+                  "description": "Nome do cliente associado ao boleto"
+                }
+              },
+              "required": ["due_date", "total_in_cents", "customer"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Boleto criado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "ID do boleto criado"
+                },
+                "due_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de vencimento do boleto (formato: YYYY-MM-DD)"
+                },
+                "total_in_cents": {
+                  "type": "integer",
+                  "description": "Valor total do boleto em centavos"
+                },
+                "customer": {
+                  "type": "string",
+                  "description": "Nome do cliente associado ao boleto"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status atual do boleto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos fornecidos na solicitação"
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "summary": "Obter todos os boletos",
+        "description": "Obtém todos os registros de boletos da tabela 'bankslips'",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de boletos obtida com sucesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do boleto"
+                  },
+                  "due_date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data de vencimento do boleto (formato: YYYY-MM-DD)"
+                  },
+                  "total_in_cents": {
+                    "type": "integer",
+                    "description": "Valor total do boleto em centavos"
+                  },
+                  "customer": {
+                    "type": "string",
+                    "description": "Nome do cliente associado ao boleto"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status atual do boleto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/rest/bankslips/{id}": {
+      "get": {
+        "summary": "Obter um boleto por ID",
+        "description": "Obtém um único registro de boleto da tabela 'bankslips' com base no ID fornecido",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do boleto a ser buscado",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boleto encontrado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "ID do boleto"
+                },
+                "due_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de vencimento do boleto (formato: YYYY-MM-DD)"
+                },
+                "payment_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de pagamento do boleto (formato: YYYY-MM-DD)"
+                },
+                "total_in_cents": {
+                  "type": "integer",
+                  "description": "Valor total do boleto em centavos"
+                },
+                "customer": {
+                  "type": "string",
+                  "description": "Nome do cliente associado ao boleto"
+                },
+                "fine": {
+                  "type": "integer",
+                  "description": "Valor da multa do boleto em centavos"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status atual do boleto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "404": {
+            "description": "Boleto não encontrado com o ID fornecido"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Cancelar um boleto por ID",
+        "description": "Cancela um registro de boleto da tabela 'bankslips' com base no ID fornecido",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do boleto a ser cancelado",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boleto cancelado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "ID do boleto"
+                },
+                "due_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de vencimento do boleto (formato: YYYY-MM-DD)"
+                },
+                "payment_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Data de pagamento do boleto (formato: YYYY-MM-DD)"
+                },
+                "total_in_cents": {
+                  "type": "integer",
+                  "description": "Valor total do boleto em centavos"
+                },
+                "customer": {
+                  "type": "string",
+                  "description": "Nome do cliente associado ao boleto"
+                },
+                "fine": {
+                  "type": "integer",
+                  "description": "Valor da multa do boleto em centavos"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status atual do boleto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "404": {
+            "description": "Boleto não encontrado com o ID fornecido"
+          },
+          "422": {
+            "description": "Não é possível cancelar um boleto que não está no status 'PENDING'"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir um boleto por ID",
+        "description": "Exclui um registro de boleto da tabela 'bankslips' com base no ID fornecido",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do boleto a ser excluído",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boleto excluído com sucesso"
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "404": {
+            "description": "Boleto não encontrado com o ID fornecido"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/rest/bankslips/{id}/payments": {
+      "post": {
+        "summary": "Efetuar o pagamento de um boleto",
+        "description": "Efetua o pagamento de um boleto bancário, atualizando seu status e definindo a data de pagamento",
+        "tags": [
+          "BankSlips"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do boleto a ser pago",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "payment_date",
+            "in": "body",
+            "description": "Data de pagamento do boleto (formato: YYYY-MM-DD)",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "payment_date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "required": ["payment_date"]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Boleto pago com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos fornecidos na solicitação"
+          },
+          "401": {
+            "description": "Token de autenticação não fornecido ou inválido"
+          },
+          "404": {
+            "description": "Boleto não encontrado com o ID fornecido"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    }
+  },
+  
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
